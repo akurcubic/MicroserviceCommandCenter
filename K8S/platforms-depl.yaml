@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:                
+  name: platforms-depl    # Naziv resursa
+spec: 
+  replicas: 1            # Broj instanci
+  selector:              # Selektor
+    matchLabels:
+      app: platformservice
+  template:              
+    metadata:            # Metadata za podove
+      labels:
+        app: platformservice
+    spec:                # Specifikacija kontejnera
+      containers:
+        - name: platformservice  # Ime kontejnera
+          image: aleksandar930/platformservice:latest  # Slika kontejnera
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: platforms-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: platformservice
+  ports:
+  - name: platformservice
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  - name: platformgrpc
+    protocol: TCP
+    port: 666
+    targetPort: 666
+
+  
